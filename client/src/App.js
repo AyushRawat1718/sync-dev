@@ -1,9 +1,19 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Landing from "./pages/Landing";
+import RoleSelect from "./pages/RoleSelect";
+import Host from "./pages/Host";
+import Guest from "./pages/Guest";
+
 function App() {
   return (
-    <div>
-      <h1>sync-dev</h1>
-      <p>Real-time collaborative coding with AI</p>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/join" element={<RoleSelect />} />
+        <Route path="/host" element={<Host />} />
+        <Route path="/guest" element={<Guest />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
