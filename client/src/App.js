@@ -1,10 +1,24 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+
 import Landing from "./pages/Landing";
 import RoleSelect from "./pages/RoleSelect";
 import Host from "./pages/Host";
 import Guest from "./pages/Guest";
 
+import socket from "./services/socket";
+
 function App() {
+  useEffect(() => {
+    socket.on("user-joined", ({ userName }) => {
+      console.log(`${userName} joined the project`);
+    });
+
+    return () => {
+      socket.off("user-joined");
+    };
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
