@@ -7,13 +7,23 @@ function CodeEditor() {
   const isRemoteUpdate = useRef(false);
 
   useEffect(() => {
-    socket.on("code-update", ({ code }) => {
+    const projectId = getProjectId();
+    if (projectId) {
+      socket.emit("join-project", {
+        projectId,
+        userName: "Reconnected User",
+      });
+    }
+
+    const handleCodeUpdate = ({ code }) => {
       isRemoteUpdate.current = true;
       setCode(code);
-    });
+    };
+
+    socket.on("code-update", handleCodeUpdate);
 
     return () => {
-      socket.off("code-update");
+      socket.off("code-update", handleCodeUpdate);
     };
   }, []);
 
