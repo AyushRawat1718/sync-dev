@@ -5,6 +5,7 @@ import Landing from "./pages/Landing";
 import RoleSelect from "./pages/RoleSelect";
 import Host from "./pages/Host";
 import Guest from "./pages/Guest";
+import CodeEditor from "./pages/Editor";
 
 import socket from "./services/socket";
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/join" element={<RoleSelect />} />
         <Route path="/host" element={<Host />} />
         <Route path="/guest" element={<Guest />} />
+        <Route path="/editor" element={<CodeEditor />} />
       </Routes>
     </BrowserRouter>
   );

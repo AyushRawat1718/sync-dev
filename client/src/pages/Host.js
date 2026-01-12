@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import socket from "../services/socket";
 
 function Host() {
   const [projectId, setProjectId] = useState("");
   const [hostName, setHostName] = useState("");
+  const navigate = useNavigate();
 
   const createProject = async () => {
     const res = await fetch("http://localhost:5000/api/projects/create", {
@@ -19,7 +21,7 @@ function Host() {
       userName: hostName,
     });
 
-    alert(`Project created. Project ID: ${data.projectId}`);
+    navigate("/editor");
   };
 
   const resumeProject = async () => {
@@ -29,6 +31,11 @@ function Host() {
       body: JSON.stringify({ projectId }),
     });
 
+    if (!res.ok) {
+      alert("Project not found");
+      return;
+    }
+
     const data = await res.json();
 
     socket.emit("join-project", {
@@ -36,7 +43,7 @@ function Host() {
       userName: hostName,
     });
 
-    alert(`Resumed project ${data.projectId}`);
+    navigate("/editor");
   };
 
   return (
