@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import socket, { setProjectId } from "../services/socket";
+import { setProjectId } from "../services/socket";
 
 function Guest() {
   const [projectId, setProjectIdInput] = useState("");
@@ -27,13 +27,11 @@ function Guest() {
       return;
     }
 
-    // 🔑 THIS WAS THE MISSING LINE
+    // ✅ Only responsibility: store project context
     setProjectId(projectId);
 
-    socket.emit("join-project", {
-      projectId,
-      userName: name,
-    });
+    // ❌ DO NOT join socket room here
+    // Editor will handle that
 
     navigate("/editor");
   };

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import socket, { setProjectId } from "../services/socket";
+import { setProjectId } from "../services/socket";
 
 function Host() {
   const [projectId, setProjectIdInput] = useState("");
@@ -19,11 +19,6 @@ function Host() {
 
     setGeneratedProjectId(data.projectId);
     setProjectId(data.projectId);
-
-    socket.emit("join-project", {
-      projectId: data.projectId,
-      userName: hostName,
-    });
   };
 
   const resumeProject = async () => {
@@ -42,11 +37,6 @@ function Host() {
 
     setGeneratedProjectId(data.projectId);
     setProjectId(data.projectId);
-
-    socket.emit("join-project", {
-      projectId: data.projectId,
-      userName: hostName,
-    });
   };
 
   const goToEditor = () => {

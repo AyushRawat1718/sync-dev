@@ -14,11 +14,13 @@ router.post("/create", async (req, res) => {
     hostName,
     files: [
       {
+        fileId: "main",
         filename: "index.js",
         language: "javascript",
         content: "",
       },
     ],
+    activeFileId: "main",
   });
 
   res.json(project);
