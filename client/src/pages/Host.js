@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import socket from "../services/socket";
+import socket, { setProjectId } from "../services/socket";
 
 function Host() {
-  const [projectId, setProjectId] = useState("");
+  const [projectId, setProjectIdInput] = useState("");
+  const [generatedProjectId, setGeneratedProjectId] = useState("");
   const [hostName, setHostName] = useState("");
   const navigate = useNavigate();
 
@@ -16,12 +17,13 @@ function Host() {
 
     const data = await res.json();
 
+    setGeneratedProjectId(data.projectId);
+    setProjectId(data.projectId);
+
     socket.emit("join-project", {
       projectId: data.projectId,
       userName: hostName,
     });
-
-    navigate("/editor");
   };
 
   const resumeProject = async () => {
@@ -38,11 +40,16 @@ function Host() {
 
     const data = await res.json();
 
+    setGeneratedProjectId(data.projectId);
+    setProjectId(data.projectId);
+
     socket.emit("join-project", {
       projectId: data.projectId,
       userName: hostName,
     });
+  };
 
+  const goToEditor = () => {
     navigate("/editor");
   };
 
@@ -65,10 +72,24 @@ function Host() {
         <input
           placeholder="Existing Project ID"
           value={projectId}
-          onChange={(e) => setProjectId(e.target.value)}
+          onChange={(e) => setProjectIdInput(e.target.value)}
         />
         <button onClick={resumeProject}>Resume Project</button>
       </div>
+
+      {generatedProjectId && (
+        <div style={{ marginTop: 30 }}>
+          <p>
+            <strong>Project ID:</strong>
+          </p>
+          <code style={{ fontSize: 18 }}>{generatedProjectId}</code>
+
+          <br />
+          <br />
+
+          <button onClick={goToEditor}>Go to Editor</button>
+        </div>
+      )}
     </div>
   );
 }

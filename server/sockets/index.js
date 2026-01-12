@@ -19,7 +19,7 @@ const setupSocket = (server) => {
     });
 
     socket.on("code-change", ({ projectId, code }) => {
-      socket.to(projectId).emit("code-update", {
+      io.to(projectId).emit("code-update", {
         code,
       });
     });

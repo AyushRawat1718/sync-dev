@@ -1,11 +1,21 @@
 import { useState } from "react";
-import socket from "../services/socket";
+import { useNavigate } from "react-router-dom";
+import socket, { setProjectId } from "../services/socket";
 
 function Guest() {
-  const [projectId, setProjectId] = useState("");
+  const [projectId, setProjectIdInput] = useState("");
   const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const joinProject = async () => {
+    setError("");
+
+    if (!name || !projectId) {
+      setError("Please enter both name and project ID");
+      return;
+    }
+
     const res = await fetch("http://localhost:5000/api/projects/join", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -13,16 +23,19 @@ function Guest() {
     });
 
     if (!res.ok) {
-      alert("Project not found");
+      setError("Project not found. Please check the Project ID.");
       return;
     }
+
+    // 🔑 THIS WAS THE MISSING LINE
+    setProjectId(projectId);
 
     socket.emit("join-project", {
       projectId,
       userName: name,
     });
 
-    alert("Joined project successfully");
+    navigate("/editor");
   };
 
   return (
@@ -41,13 +54,15 @@ function Guest() {
       <input
         placeholder="Project ID"
         value={projectId}
-        onChange={(e) => setProjectId(e.target.value)}
+        onChange={(e) => setProjectIdInput(e.target.value)}
       />
 
       <br />
       <br />
 
       <button onClick={joinProject}>Join Project</button>
+
+      {error && <p style={{ color: "red", marginTop: 20 }}>{error}</p>}
     </div>
   );
 }
