@@ -18,6 +18,12 @@ const setupSocket = (server) => {
       });
     });
 
+    socket.on("code-change", ({ projectId, code }) => {
+      socket.to(projectId).emit("code-update", {
+        code,
+      });
+    });
+
     socket.on("disconnect", () => {
       console.log("User disconnected:", socket.id);
     });
